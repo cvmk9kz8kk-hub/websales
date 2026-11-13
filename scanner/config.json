@@ -1,0 +1,39 @@
+{
+  "_info": "PLZ im Umkreis von ca. 20 km um 15806 Zossen. marktguru liefert pro PLZ die Angebote der Märkte in der Nähe.",
+  "home_zip": "15806",
+  "zips": {
+    "15806": "Zossen / Wünsdorf",
+    "15834": "Rangsdorf",
+    "15827": "Blankenfelde-Mahlow",
+    "14974": "Ludwigsfelde",
+    "15749": "Mittenwalde",
+    "15711": "Königs Wusterhausen",
+    "15837": "Baruth/Mark",
+    "14959": "Trebbin"
+  },
+  "broad_queries": ["", "*"],
+  "terms": [
+    "butter", "milch", "käse", "joghurt", "quark", "sahne", "eier", "brot", "brötchen", "aufschnitt", "wurst", "salami", "schinken",
+    "hähnchen", "pute", "rind", "schwein", "hackfleisch", "steak", "lachs", "fisch", "garnelen",
+    "obst", "äpfel", "bananen", "beeren", "trauben", "gemüse", "tomaten", "kartoffeln", "salat", "paprika",
+    "nudeln", "reis", "mehl", "zucker", "öl", "pizza", "tiefkühl", "eis", "müsli", "haferflocken",
+    "schokolade", "chips", "kekse", "süßigkeiten", "nüsse", "proteinriegel", "whey",
+    "kaffee", "kaffeebohnen", "tee", "bier", "wein", "sekt", "spirituosen", "wasser", "saft", "cola", "energy drink",
+    "waschmittel", "spülmittel", "toilettenpapier", "küchenrolle", "zahnpasta", "duschgel", "shampoo", "deo", "rasierer", "windeln",
+    "katzenfutter", "hundefutter",
+    "fernseher", "tv", "smartphone", "iphone", "samsung", "tablet", "laptop", "notebook", "monitor", "kopfhörer", "lautsprecher", "soundbar",
+    "konsole", "playstation", "nintendo", "xbox", "smartwatch", "kamera", "drucker", "festplatte", "ssd", "router", "powerbank",
+    "staubsauger", "saugroboter", "kaffeevollautomat", "kaffeemaschine", "heißluftfritteuse", "airfryer", "mikrowelle", "kühlschrank",
+    "waschmaschine", "trockner", "geschirrspüler", "küchenmaschine", "mixer", "wasserkocher", "toaster",
+    "werkzeug", "akkuschrauber", "bohrmaschine", "kettensäge", "rasenmäher", "grill", "gartenmöbel", "pflanzen", "erde", "holz", "farbe", "lampe", "led",
+    "möbel", "matratze", "bettwäsche", "handtuch", "pfanne", "topf",
+    "auto", "autowäsche", "waschanlage", "reifen", "winterreifen", "motoröl", "scheibenfrostschutz", "autobatterie", "wischblätter", "kfz",
+    "fahrrad", "e-bike", "fitness", "hantel", "spielzeug", "lego", "batterien", "heizlüfter", "brennholz", "pellets", "gutschein"
+  ],
+  "page_limit": 250,
+  "max_pages_term": 3,
+  "max_pages_broad": 20,
+  "request_pause_s": 0.35,
+  "lookahead_days": 7,
+  "history_max_obs": 80
+}

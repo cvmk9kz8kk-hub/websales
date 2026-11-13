@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f172a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Angebots-Radar">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<title>Angebots-Radar 15806</title>
+<style>
+:root{
+  --bg:#0b1120;--card:#141c2f;--card2:#1b2540;--line:#26324f;--tx:#e8edf7;--mut:#8f9bb5;
+  --acc:#22c55e;--acc2:#16a34a;--warn:#f59e0b;--bad:#ef4444;--blue:#60a5fa;--gold:#fbbf24;
+  --r:14px;--safe-b:env(safe-area-inset-bottom,0px);--safe-t:env(safe-area-inset-top,0px)
+}
+@media (prefers-color-scheme:light){
+  :root{--bg:#f3f5f9;--card:#fff;--card2:#eef2f8;--line:#dfe5ef;--tx:#0f172a;--mut:#5b6780}
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.4 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif}
+header{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding:calc(var(--safe-t) + 10px) 14px 8px;border-bottom:1px solid var(--line)}
+.top{display:flex;align-items:center;gap:10px}
+.top h1{font-size:19px;margin:0;font-weight:750;letter-spacing:-.2px}
+.top h1 span{color:var(--acc)}
+.stand{margin-left:auto;font-size:12px;color:var(--mut);text-align:right}
+.search{margin-top:9px;display:flex;gap:8px}
+.search input,.search select{background:var(--card);border:1px solid var(--line);color:var(--tx);border-radius:11px;padding:9px 11px;font-size:15px;outline:none}
+.search input{flex:1;min-width:0}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:9px 0 2px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--line);background:var(--card);color:var(--tx);border-radius:999px;padding:6px 11px;font-size:13px;white-space:nowrap}
+.chip.on{background:var(--acc);border-color:var(--acc);color:#04110a;font-weight:650}
+.chip small{opacity:.65;margin-left:3px}
+main{padding:10px 12px calc(84px + var(--safe-b))}
+.sec{font-size:13px;text-transform:uppercase;letter-spacing:.6px;color:var(--mut);margin:14px 4px 8px;font-weight:650}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:11px;display:grid;grid-template-columns:76px 1fr;gap:11px;margin-bottom:9px;position:relative}
+.card.watch{border-color:var(--blue)}
+.img{width:76px;height:76px;border-radius:11px;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:32px;overflow:hidden}
+.img img{width:100%;height:100%;object-fit:contain;background:#fff}
+.meta{font-size:12px;color:var(--mut);display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.meta b{color:var(--tx);font-weight:650}
+.name{font-weight:650;margin:2px 0 4px;font-size:15px;line-height:1.25;padding-right:46px}
+.brand{color:var(--mut);font-weight:500}
+.prow{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.price{font-size:20px;font-weight:800;letter-spacing:-.3px}
+.old{color:var(--mut);text-decoration:line-through;font-size:13px}
+.disc{background:var(--bad);color:#fff;border-radius:7px;padding:1px 7px;font-weight:800;font-size:13px}
+.save{color:var(--acc);font-size:12.5px;font-weight:650}
+.tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
+.tag{font-size:11.5px;border-radius:6px;padding:2px 6px;background:var(--card2);color:var(--mut)}
+.tag.g{color:var(--acc)} .tag.y{color:var(--gold)} .tag.w{color:var(--warn)} .tag.b{color:var(--blue)}
+.score{position:absolute;top:10px;right:10px;min-width:38px;text-align:center;border-radius:9px;padding:3px 6px;font-weight:800;font-size:13px;background:var(--card2)}
+.score.top{background:var(--acc);color:#04110a}.score.gut{background:#15803d;color:#fff}.score.ok{background:#334155;color:#e2e8f0}
+.acts{display:flex;gap:6px;margin-top:8px}
+.acts button{flex:1;background:var(--card2);border:1px solid var(--line);color:var(--tx);border-radius:9px;padding:6px 0;font-size:15px}
+.acts button.on{border-color:var(--acc);background:color-mix(in srgb,var(--acc) 18%,var(--card2))}
+.det{grid-column:1/-1;font-size:13px;color:var(--mut);border-top:1px dashed var(--line);padding-top:8px;display:none}
+.card.open .det{display:block}
+.det a{color:var(--blue)}
+.empty{text-align:center;color:var(--mut);padding:40px 16px}
+.empty h3{color:var(--tx)}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:color-mix(in srgb,var(--card) 94%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:6px 6px calc(6px + var(--safe-b));z-index:6}
+nav button{flex:1;background:none;border:0;color:var(--mut);font-size:11.5px;padding:4px 0;display:flex;flex-direction:column;align-items:center;gap:2px}
+nav button span{font-size:21px}
+nav button.on{color:var(--acc)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:13px;margin-bottom:10px}
+.panel h3{margin:0 0 8px;font-size:15px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.row label{flex:1}
+input[type=range]{width:100%;accent-color:var(--acc)}
+input[type=checkbox]{width:20px;height:20px;accent-color:var(--acc)}
+.btn{background:var(--acc);color:#04110a;border:0;border-radius:10px;padding:9px 13px;font-weight:700;font-size:14px}
+.btn.sec2{background:var(--card2);color:var(--tx);border:1px solid var(--line)}
+.kw{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.kw .chip button{background:none;border:0;color:inherit;margin-left:4px;font-size:13px}
+.small{font-size:12.5px;color:var(--mut)}
+.err{background:color-mix(in srgb,var(--bad) 18%,var(--card));border:1px solid var(--bad);border-radius:11px;padding:9px 11px;font-size:13px;margin-bottom:10px}
+.more{display:block;margin:12px auto;}
+.toast{position:fixed;left:50%;bottom:calc(80px + var(--safe-b));transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:8px 14px;border-radius:999px;font-size:13px;opacity:0;transition:.25s;pointer-events:none;z-index:9}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+<header>
+  <div class="top">
+    <h1>Angebots-<span>Radar</span></h1>
+    <div class="stand" id="stand">lädt …</div>
+  </div>
+  <div id="filters">
+    <div class="search">
+      <input id="q" type="search" placeholder="Suchen: Kaffee, Monitor, Bier …" autocomplete="off">
+      <select id="sort" aria-label="Sortierung">
+        <option value="pers">Für dich</option>
+        <option value="score">Deal-Score</option>
+        <option value="disc">Rabatt %</option>
+        <option value="save">Ersparnis €</option>
+        <option value="price">Preis</option>
+        <option value="end">Läuft bald ab</option>
+      </select>
+    </div>
+    <div class="chips" id="groups"></div>
+  </div>
+</header>
+
+<main id="view"></main>
+
+<nav>
+  <button data-tab="deals" class="on"><span>🔥</span>Deals</button>
+  <button data-tab="saved"><span>★</span>Gemerkt</button>
+  <button data-tab="settings"><span>⚙︎</span>Einstellungen</button>
+</nav>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+const VERSION = "1.0";
+const GROUPS = {
+  all:{l:"Alle",e:"🛒"}, lebensmittel:{l:"Lebensmittel",e:"🥦"}, getraenke:{l:"Getränke",e:"🥤"},
+  drogerie:{l:"Drogerie & Haushalt",e:"🧴"}, elektronik:{l:"Elektronik",e:"📺"}, baumarkt:{l:"Haus & Garten",e:"🛠️"},
+  auto:{l:"Auto",e:"🚗"}, tier:{l:"Tier",e:"🐾"}, sonstiges:{l:"Sonstiges",e:"🎁"}
+};
+const LS = {
+  get(k,d){try{const v=localStorage.getItem("ar_"+k);return v?JSON.parse(v):d}catch(e){return d}},
+  set(k,v){try{localStorage.setItem("ar_"+k,JSON.stringify(v))}catch(e){}}
+};
+const st = {
+  data:null, tab:"deals", group:"all", q:"", sort:LS.get("sort","pers"), shown:60,
+  prefs:LS.get("prefs",{g:{},r:{},b:{},t:{}}),
+  votes:LS.get("votes",{}),           // offerId -> 1 | -1
+  saved:LS.get("saved",{}),           // offerId -> snapshot
+  watch:LS.get("watch",[]),           // Stichwörter
+  set:LS.get("settings",{minDisc:0,minScore:0,hideGroups:[],hideRetailers:[],hideDown:true,onlyCurrent:false})
+};
+const $ = s => document.querySelector(s);
+const esc = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const eur = v => v==null?"":v.toLocaleString("de-DE",{style:"currency",currency:"EUR"});
+const tokens = s => (s||"").toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g,"").split(/[^a-z0-9]+/).filter(w=>w.length>3);
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove("show"),1600)}
+function dayFmt(iso){if(!iso)return"";const d=new Date(iso);return d.toLocaleDateString("de-DE",{weekday:"short",day:"2-digit",month:"2-digit"})}
+function validity(o){
+  const now=Date.now(),f=o.from?Date.parse(o.from):0,t=o.to?Date.parse(o.to):0;
+  if(f>now) return {txt:"ab "+dayFmt(o.from),soon:false,future:true};
+  if(!t) return {txt:"",soon:false};
+  const days=Math.ceil((t-now)/864e5);
+  return {txt: days<=0?"nur heute":days===1?"bis morgen":"bis "+dayFmt(o.to), soon:days<=1};
+}
+
+/* ---------- Lernen: persönliche Gewichtung ---------- */
+function persBonus(o){
+  const p=st.prefs; let b=0;
+  b += 4*(p.g[o.group]||0) + 3*(p.r[o.retailer]||0) + (o.brand?3*(p.b[o.brand]||0):0);
+  let tk=0; for(const w of tokens(o.name)) tk += (p.t[w]||0); b += Math.max(-8,Math.min(8,2*tk));
+  if(isWatched(o)) b += 25;
+  return Math.max(-35,Math.min(35,b));
+}
+function learn(o,dir){
+  const p=st.prefs, clamp=v=>Math.max(-5,Math.min(5,v));
+  p.g[o.group]=clamp((p.g[o.group]||0)+dir*.5);
+  p.r[o.retailer]=clamp((p.r[o.retailer]||0)+dir*.3);
+  if(o.brand) p.b[o.brand]=clamp((p.b[o.brand]||0)+dir*.6);
+  for(const w of tokens(o.name)) p.t[w]=clamp((p.t[w]||0)+dir*.5);
+  LS.set("prefs",p);
+}
+function isWatched(o){
+  if(!st.watch.length) return false;
+  const hay=(o.name+" "+o.brand+" "+o.desc+" "+o.retailer).toLowerCase();
+  return st.watch.some(w=>hay.includes(w.toLowerCase()));
+}
+
+/* ---------- Daten ---------- */
+async function load(){
+  try{
+    const r=await fetch("data/offers.json?t="+Date.now(),{cache:"no-store"});
+    st.data=await r.json();
+  }catch(e){st.data=st.data||null}
+  st.loadedAt=Date.now();
+  renderStand(); renderGroups(); render();
+}
+function renderStand(){
+  const m=st.data&&st.data.meta;
+  if(!m||!m.generated){$("#stand").innerHTML="noch kein Scan";return}
+  const d=new Date(m.generated);
+  $("#stand").innerHTML=`${m.count} Angebote<br>Stand ${d.toLocaleDateString("de-DE",{day:"2-digit",month:"2-digit"})} ${d.toLocaleTimeString("de-DE",{hour:"2-digit",minute:"2-digit"})}`;
+}
+function filtered(){
+  const s=st.set, q=st.q.trim().toLowerCase();
+  let list=(st.data?.offers||[]).filter(o=>{
+    if(s.hideGroups.includes(o.group)) return false;
+    if(s.hideRetailers.includes(o.retailer)) return false;
+    if(s.hideDown && st.votes[o.id]===-1) return false;
+    if(st.group!=="all" && o.group!==st.group) return false;
+    if(s.minDisc && (o.disc||0)<s.minDisc) return false;
+    if(s.minScore && o.score<s.minScore) return false;
+    if(s.onlyCurrent && o.from && Date.parse(o.from)>Date.now()) return false;
+    if(q){const hay=(o.name+" "+o.brand+" "+o.desc+" "+o.retailer+" "+(o.cats||[]).join(" ")).toLowerCase(); if(!q.split(/\s+/).every(w=>hay.includes(w))) return false;}
+    return true;
+  });
+  const key={
+    pers:o=>-(o.score+persBonus(o)), score:o=>-o.score, disc:o=>-(o.disc||0), save:o=>-(o.saving||0),
+    price:o=>o.price, end:o=>o.to?Date.parse(o.to):9e15
+  }[st.sort]||(o=>-o.score);
+  return list.map(o=>[key(o),o]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);
+}
+
+/* ---------- Rendering ---------- */
+function renderGroups(){
+  const counts={all:0}; for(const o of st.data?.offers||[]){ if(st.set.hideGroups.includes(o.group)) continue; counts[o.group]=(counts[o.group]||0)+1; counts.all++; }
+  $("#groups").innerHTML=Object.entries(GROUPS).filter(([k])=>k==="all"||counts[k]).map(([k,g])=>
+    `<button class="chip ${st.group===k?"on":""}" data-g="${k}">${g.e} ${g.l}<small>${counts[k]||0}</small></button>`).join("");
+}
+function card(o,watch){
+  const v=validity(o), g=GROUPS[o.group]||GROUPS.sonstiges, vote=st.votes[o.id], saved=!!st.saved[o.id];
+  const tags=[];
+  if(o.best) tags.push(`<span class="tag g">🏆 Tiefstpreis seit Beobachtung</span>`);
+  if(o.vsHist!=null && o.vsHist>=3) tags.push(`<span class="tag g">−${o.vsHist} % vs. sonst im Angebot</span>`);
+  if(o.vsHist!=null && o.vsHist<=-5) tags.push(`<span class="tag w">teurer als sonst (+${-o.vsHist} %)</span>`);
+  if(o.permanent) tags.push(`<span class="tag w">🔁 Dauerangebot</span>`);
+  if(o.refSrc==="historie") tags.push(`<span class="tag">Normalpreis aus Historie</span>`);
+  if(o.disc==null && !o.histN) tags.push(`<span class="tag">Normalpreis unbekannt</span>`);
+  if(o.loyalty) tags.push(`<span class="tag y">💳 nur mit App/Karte</span>`);
+  if(v.future) tags.push(`<span class="tag b">demnächst</span>`);
+  if(watch) tags.push(`<span class="tag b">🔔 Merkliste</span>`);
+  if(o.unitPrice && o.unit) tags.push(`<span class="tag">${eur(o.unitPrice)}/${esc(o.unit)}</span>`);
+  return `<article class="card ${watch?"watch":""}" data-id="${esc(o.id)}">
+    <div class="score ${o.label}" title="Deal-Score">${o.score}</div>
+    <div class="img">${o.img?`<img loading="lazy" src="${esc(o.img)}" alt="" onerror="this.replaceWith(document.createTextNode('${g.e}'))">`:g.e}</div>
+    <div>
+      <div class="meta"><b>${esc(o.retailer)}</b>${v.txt?`· <span style="${v.soon?"color:var(--warn)":""}">${v.txt}</span>`:""}</div>
+      <div class="name">${esc(o.name)} ${o.brand?`<span class="brand">· ${esc(o.brand)}</span>`:""}</div>
+      <div class="prow"><span class="price">${eur(o.price)}</span>${o.ref?`<span class="old">${eur(o.ref)}</span>`:""}${o.disc?`<span class="disc">−${o.disc} %</span>`:""}${o.saving&&o.saving>=1?`<span class="save">spart ${eur(o.saving)}</span>`:""}</div>
+      <div class="tags">${tags.join("")}</div>
+      <div class="acts">
+        <button data-a="up" class="${vote===1?"on":""}" aria-label="Guter Deal">👍</button>
+        <button data-a="down" class="${vote===-1?"on":""}" aria-label="Uninteressant">👎</button>
+        <button data-a="save" class="${saved?"on":""}" aria-label="Merken">${saved?"★":"☆"}</button>
+      </div>
+    </div>
+    <div class="det">
+      ${o.desc?esc(o.desc)+"<br>":""}
+      ${(o.cats||[]).length?"Kategorie: "+esc(o.cats.join(", "))+"<br>":""}
+      ${o.histN?`Beobachtet: ${o.histN}× im Angebot · günstigster ${eur(o.histLow)}${o.cmpUnit?"/"+esc(o.cmpUnit):""} · üblich ${eur(o.histMed)}${o.cmpUnit?"/"+esc(o.cmpUnit):""}<br>`:"Noch keine Preis-Historie – die App lernt mit jedem Scan dazu.<br>"}
+      ${o.ref?`Normalpreis: ${o.refSrc==="prospekt"?"„statt“-Preis laut Prospekt":"geschätzt aus früheren Prospekten"}<br>`:""}
+      Gültig: ${o.from?dayFmt(o.from):"?"} – ${o.to?dayFmt(o.to):"?"}<br>
+      ${o.url?`<a href="${esc(o.url)}" target="_blank" rel="noopener">Zum Angebot ↗</a>`:""}
+    </div>
+  </article>`;
+}
+function renderDeals(){
+  $("#filters").style.display="";
+  if(!st.data||!st.data.offers){return emptyState()}
+  const m=st.data.meta||{}; let html="";
+  if(m.lastError) html+=`<div class="err">⚠️ Letzter Scan hatte ein Problem: ${esc(m.lastError)}<br>Angezeigt werden die zuletzt erfolgreichen Daten.</div>`;
+  if(!st.data.offers.length) return emptyState(html);
+  const list=filtered();
+  if(!st.q && st.group==="all" && st.watch.length){
+    const w=list.filter(isWatched).slice(0,8);
+    if(w.length) html+=`<div class="sec">🔔 Treffer deiner Merkliste</div>`+w.map(o=>card(o,true)).join("");
+  }
+  if(!st.q && st.group==="all" && st.sort==="pers"){
+    const top=list.filter(o=>o.label==="top").length;
+    html+=`<div class="sec">${top?`${top} Top-Deals · `:""}${list.length} Angebote · rund um ${esc(m.homeZip||"15806")}</div>`;
+  } else html+=`<div class="sec">${list.length} Treffer</div>`;
+  html+=list.slice(0,st.shown).map(o=>card(o,isWatched(o))).join("");
+  if(list.length>st.shown) html+=`<button class="btn sec2 more" id="more">Mehr anzeigen (${list.length-st.shown})</button>`;
+  if(!list.length) html+=`<div class="empty">Keine Angebote für diese Filter.</div>`;
+  $("#view").innerHTML=html;
+  const mb=$("#more"); if(mb && "IntersectionObserver" in window){new IntersectionObserver((e,ob)=>{if(e[0].isIntersecting){ob.disconnect();st.shown+=60;renderDeals()}},{rootMargin:"600px"}).observe(mb)}
+}
+function emptyState(prefix=""){
+  $("#view").innerHTML=prefix+`<div class="empty"><h3>Noch keine Angebote</h3>
+    Der tägliche Scan ist noch nicht gelaufen.<br><br>
+    Auf GitHub: <b>Actions → „Angebots-Scan &amp; Deploy“ → Run workflow</b>.<br>
+    Nach ca. 5–15 Minuten erscheinen hier die Angebote rund um 15806.</div>`;
+}
+function renderSaved(){
+  $("#filters").style.display="none";
+  const cur=new Map((st.data?.offers||[]).map(o=>[o.id,o]));
+  const items=Object.values(st.saved).map(s=>cur.get(s.id)||s).sort((a,b)=>(Date.parse(a.to)||0)-(Date.parse(b.to)||0));
+  let html=`<div class="sec">★ Gemerkt (${items.length})</div>`;
+  if(!items.length) html+=`<div class="empty">Tippe bei einem Angebot auf ☆, um es hier zu sammeln – praktisch als Einkaufszettel.</div>`;
+  else {
+    html+=items.map(o=>card(o,false)).join("");
+    html+=`<button class="btn sec2 more" id="clearOld">Abgelaufene entfernen</button>`;
+  }
+  $("#view").innerHTML=html;
+}
+function renderSettings(){
+  $("#filters").style.display="none";
+  const s=st.set, m=st.data?.meta||{}, rets=Object.keys(m.retailers||{});
+  const learned=Object.entries(st.prefs.g).filter(([,v])=>Math.abs(v)>=.5).sort((a,b)=>b[1]-a[1]);
+  $("#view").innerHTML=`
+  <div class="panel"><h3>🔔 Merkliste (Stichwörter)</h3>
+    <div class="small">Treffer werden oben angezeigt und stärker gewichtet.</div>
+    <div class="search"><input id="kwIn" placeholder="z. B. Kaffee, Monitor, Autowäsche"><button class="btn" id="kwAdd">+</button></div>
+    <div class="kw">${st.watch.map((w,i)=>`<span class="chip on">${esc(w)}<button data-kw="${i}">✕</button></span>`).join("")}</div>
+  </div>
+  <div class="panel"><h3>Filter</h3>
+    <div class="row"><label>Mindest-Rabatt: <b id="mdV">${s.minDisc} %</b><input type="range" id="md" min="0" max="70" step="5" value="${s.minDisc}"></label></div>
+    <div class="row"><label>Mindest-Deal-Score: <b id="msV">${s.minScore}</b><input type="range" id="ms" min="0" max="80" step="5" value="${s.minScore}"></label></div>
+    <div class="row"><label for="hd">👎-Angebote ausblenden</label><input type="checkbox" id="hd" ${s.hideDown?"checked":""}></div>
+    <div class="row"><label for="oc">Nur schon gültige (keine „demnächst“)</label><input type="checkbox" id="oc" ${s.onlyCurrent?"checked":""}></div>
+  </div>
+  <div class="panel"><h3>Bereiche</h3>
+    ${Object.entries(GROUPS).filter(([k])=>k!=="all").map(([k,g])=>`<div class="row"><label for="g_${k}">${g.e} ${g.l}</label><input type="checkbox" data-hg="${k}" id="g_${k}" ${s.hideGroups.includes(k)?"":"checked"}></div>`).join("")}
+    <div class="small" style="margin-top:6px">Kleidung wird beim Scan automatisch aussortiert${m.clothingFiltered?` (zuletzt ${m.clothingFiltered} Angebote)`:""}.</div>
+  </div>
+  <div class="panel"><h3>Märkte (${rets.length})</h3>
+    ${rets.length?rets.map(r=>`<div class="row"><label>${esc(r)} <span class="small">${m.retailers[r]}</span></label><input type="checkbox" data-hr="${esc(r)}" ${s.hideRetailers.includes(r)?"":"checked"}></div>`).join(""):`<div class="small">Erscheinen nach dem ersten Scan.</div>`}
+  </div>
+  <div class="panel"><h3>🧠 Gelernt</h3>
+    <div class="small">Jedes 👍/👎 verschiebt die Sortierung „Für dich“ (Bereich, Markt, Marke, Produktwörter). Bewertungen: ${Object.keys(st.votes).length}</div>
+    <div class="kw">${learned.map(([k,v])=>`<span class="chip">${(GROUPS[k]||{}).e||""} ${(GROUPS[k]||{l:k}).l} ${v>0?"▲":"▼"}${Math.abs(v).toFixed(1)}</span>`).join("")||""}</div>
+    <div style="margin-top:10px"><button class="btn sec2" id="resetLearn">Gelerntes zurücksetzen</button></div>
+  </div>
+  <div class="panel"><h3>Datenstand</h3><div class="small">
+    Quelle: ${esc(m.source||"–")}<br>
+    Gebiet: ${m.zips?Object.entries(m.zips).map(([z,n])=>esc(z+" "+n)).join(", "):"–"}<br>
+    Letzter Scan: ${m.generated?new Date(m.generated).toLocaleString("de-DE"):"–"}<br>
+    Scan-Tage bisher: ${m.scanDays||0} · Produkte in der Preis-Historie: ${m.historyItems||0}<br>
+    Je länger die App läuft, desto besser erkennt sie echte Deals und Dauer-„Angebote“.<br><br>
+    Angebots-Radar v${VERSION} · Preise ohne Gewähr, maßgeblich ist der Markt.
+  </div></div>`;
+}
+function render(){
+  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.tab===st.tab));
+  ({deals:renderDeals,saved:renderSaved,settings:renderSettings})[st.tab]();
+}
+function findOffer(id){return (st.data?.offers||[]).find(o=>o.id===id)||st.saved[id]}
+function saveSet(){LS.set("settings",st.set)}
+
+/* ---------- Events ---------- */
+document.addEventListener("click",e=>{
+  const nb=e.target.closest("nav button"); if(nb){st.tab=nb.dataset.tab;st.shown=60;render();scrollTo(0,0);return}
+  const gc=e.target.closest("[data-g]"); if(gc){st.group=gc.dataset.g;st.shown=60;renderGroups();render();scrollTo(0,0);return}
+  const act=e.target.closest("[data-a]");
+  if(act){
+    const id=act.closest(".card").dataset.id, o=findOffer(id); if(!o) return;
+    const a=act.dataset.a;
+    if(a==="save"){ if(st.saved[id]){delete st.saved[id];toast("Entfernt")} else {st.saved[id]={...o};toast("Gemerkt ★")} LS.set("saved",st.saved); }
+    else { const dir=a==="up"?1:-1; const prev=st.votes[id]||0;
+      if(prev===dir){delete st.votes[id];learn(o,-dir)} else {if(prev)learn(o,-prev);st.votes[id]=dir;learn(o,dir);toast(dir>0?"Gemerkt: mehr davon 👍":"Weniger davon 👎")}
+      LS.set("votes",st.votes); }
+    render(); return;
+  }
+  const c=e.target.closest(".card"); if(c && !e.target.closest("a")){c.classList.toggle("open");return}
+  if(e.target.id==="clearOld"){const now=Date.now();for(const [k,v] of Object.entries(st.saved)) if(v.to&&Date.parse(v.to)<now) delete st.saved[k];LS.set("saved",st.saved);render();return}
+  if(e.target.id==="kwAdd"){const v=$("#kwIn").value.trim(); if(v&&!st.watch.includes(v)){st.watch.push(v);LS.set("watch",st.watch)} render();return}
+  if(e.target.dataset.kw!=null){st.watch.splice(+e.target.dataset.kw,1);LS.set("watch",st.watch);render();return}
+  if(e.target.id==="resetLearn"){if(confirmReset()){st.prefs={g:{},r:{},b:{},t:{}};st.votes={};LS.set("prefs",st.prefs);LS.set("votes",st.votes);render();toast("Zurückgesetzt")}return}
+});
+function confirmReset(){const b=$("#resetLearn"); if(b.dataset.c){return true} b.dataset.c=1;b.textContent="Wirklich? Nochmal tippen";setTimeout(()=>{if(b.isConnected){b.textContent="Gelerntes zurücksetzen";delete b.dataset.c}},3000);return false}
+document.addEventListener("change",e=>{
+  const t=e.target,s=st.set;
+  if(t.id==="hd") s.hideDown=t.checked;
+  else if(t.id==="oc") s.onlyCurrent=t.checked;
+  else if(t.dataset.hg){const k=t.dataset.hg;s.hideGroups=t.checked?s.hideGroups.filter(x=>x!==k):[...s.hideGroups,k];renderGroups()}
+  else if(t.dataset.hr!=null){const k=t.dataset.hr;s.hideRetailers=t.checked?s.hideRetailers.filter(x=>x!==k):[...s.hideRetailers,k]}
+  else if(t.id==="sort"){st.sort=t.value;LS.set("sort",st.sort);st.shown=60;render();return}
+  else return;
+  saveSet();
+});
+document.addEventListener("input",e=>{
+  const t=e.target;
+  if(t.id==="q"){st.q=t.value;st.shown=60;clearTimeout(st.qt);st.qt=setTimeout(render,150)}
+  else if(t.id==="md"){st.set.minDisc=+t.value;$("#mdV").textContent=t.value+" %";saveSet()}
+  else if(t.id==="ms"){st.set.minScore=+t.value;$("#msV").textContent=t.value;saveSet()}
+});
+document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.id==="kwIn")$("#kwAdd").click()});
+document.addEventListener("visibilitychange",()=>{if(!document.hidden&&Date.now()-(st.loadedAt||0)>30*60e3)load()});
+$("#sort").value=st.sort;
+if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
+load();
+</script>
+</body>
+</html>
